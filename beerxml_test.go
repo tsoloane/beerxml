@@ -6,19 +6,43 @@ import (
 
 func TestUnmarshalBeerXml(t *testing.T) {
 	t.Log("Unmarshal beerxml recipes.xml")
-	_, err := NewBeerXmlFromFile("testfiles/recipes.xml")
+	rec, err := NewBeerXmlFromFile("testfiles/recipes.xml")
 	if err != nil {
 		t.Error(err)
 		return
+	}
+
+	expected := 4
+	count := len(rec.Recipes)
+	if count != expected {
+		t.Errorf("Wrong number of recipes. Expected %d go %d", expected, count)
+	}
+
+	recipeName := "Porter"
+	recipe := rec.Recipes[2]
+
+	if recipe.Name != recipeName {
+		t.Errorf("Expected name %s but got %s",
+			recipeName, recipe.Name)
 	}
 }
 
 func TestUnmarshalBeerSmithExport(t *testing.T) {
 	t.Log("Unmarshal beerxml drsmurto.xml")
-	_, err := NewBeerXmlFromFile("testfiles/drsmurto.xml")
+	rec , err := NewBeerXmlFromFile("testfiles/drsmurto.xml")
 	if err != nil {
 		t.Error(err)
 		return
+	}
+	//Recipe count is 1
+	if len(rec.Recipes) != 1 {
+		t.Errorf("Expecting 1 recipe, but got %d", len(rec.Recipes))
+	}
+	//Recipe Name
+	recipeName := "Dr Smurto's Golden Ale"
+	if rec.Recipes[0].Name != recipeName {
+		t.Errorf("Expected '%s', but got %s",
+			recipeName, rec.Recipes[0].Name)
 	}
 }
 
